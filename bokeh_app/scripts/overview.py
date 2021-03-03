@@ -19,9 +19,10 @@ def overview_tab(df, x_name, date_name, measure):
         reduced = pd.DataFrame()
         for cat in category_list:
             subset = df[df[x_name] == cat]
-            if type(range_start) == int:
+            if (type(range_start) == int) or (type(range_start) == float):
                 range_start = datetime.fromtimestamp(range_start / 1000)
                 range_end = datetime.fromtimestamp(range_end / 1000)
+            print(range_start, range_end)
             subset = subset[(subset[date_name] > range_start) & (subset[date_name] < range_end)]
             reduced = reduced.append(subset)
         temp = pd.DataFrame(zip(viridis(len(category_list)), category_list), columns=['color', x_name])

@@ -1,12 +1,10 @@
 ## TODO
-# Format numbers on Hover Tool
-# Fix dates on data table
 
 import pandas as pd
 import numpy as np
 
 from bokeh.plotting import figure
-from bokeh.models import (ColumnDataSource, HoverTool, Panel, LinearAxis, Range1d)
+from bokeh.models import (ColumnDataSource, HoverTool, Panel, LinearAxis, Range1d, DateFormatter)
 from bokeh.models.widgets import (DataTable, TableColumn, Dropdown)
 
 
@@ -17,7 +15,7 @@ from bokeh.palettes import viridis
 
 
 # Function to make an overview of categories of expenses
-def expenses_tab(df, x_name, y_name, measure, t_count):
+def date_view_tab(df, x_name, y_name, measure, t_count):
 
     def make_dataset(category_list):
         details = pd.DataFrame()
@@ -84,8 +82,9 @@ def expenses_tab(df, x_name, y_name, measure, t_count):
         return p
 
     def make_table(tbl_src):
-        columns = [TableColumn(field=col, title=col) for col in list(tbl_src.data.keys())[1:]]
-        data_table = DataTable(source=tbl_src, columns=columns, width=600, height=600)
+        # columns = [TableColumn(field=col, title=col, formatter = DateFormatter(format="yy-m-d") if 'date' in col.lower() else None) for col in list(tbl_src.data.keys())]
+        columns = [TableColumn(field=col, title=col, formatter = DateFormatter(format="%Y-%m-%d")) if 'date' in col.lower() else TableColumn(field=col, title=col) for col in list(tbl_src.data.keys())[1:]]
+        data_table = DataTable(source=tbl_src, columns=columns, editable=True, width=600, height=600)
         return data_table
 
     def make_pie_chart(src):
@@ -116,8 +115,7 @@ def expenses_tab(df, x_name, y_name, measure, t_count):
 
     # def update(attr, old, new):
     def update(event):
-        '''https://stackoverflow.com/questions/60715996/bokeh-2-0-dropdown-missing-value-attribute'''
-        categories_to_plot = event.item
+        categories_to_plot = event.item# dropdown.value
 
         new_src, new_tbl_src = make_dataset([categories_to_plot])
 
@@ -126,7 +124,7 @@ def expenses_tab(df, x_name, y_name, measure, t_count):
 
     # categories and colors
     available_categories = list(set(df[x_name]))
-    print(available_categories)
+
     dropdown = Dropdown(label="Category", button_type="warning", menu=available_categories)
     # dropdown.on_change('value', update)
     dropdown.on_click(update)
@@ -153,6 +151,6 @@ def expenses_tab(df, x_name, y_name, measure, t_count):
 
 
     # Make a tab with the layout
-    tab = Panel(child = layout, title = 'Expenses')
+    tab = Panel(child = layout, title = 'Date View')
 
     return tab
