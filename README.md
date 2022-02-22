@@ -8,5 +8,5 @@ Requirements:
 To run the application on localhost navigate to the directory that contains the bokeh_app and run:
 > bokeh serve --show bokeh_app/
 
-I have developed this app based on [WillKoehrsen](https://github.com/WillKoehrsen/Bokeh-Python-Visualization "Github Profile") tutorials.
+I have developed this app based on [WillKoehrsen](https://github.com/WillKoehrsen/Bokeh-Python-Visualization "Github Profile") tutorials..
 
