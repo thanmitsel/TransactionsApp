@@ -1,3 +1,4 @@
 bokeh_app/data/
 venv/
 .idea/
+.ipynb_checkpoints/
